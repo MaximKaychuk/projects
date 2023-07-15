@@ -9,6 +9,9 @@ namespace Cainos.PixelArtTopDown_Basic
         public float speed;
         private Animator animator;
         private Rigidbody2D rb;
+        private bool facingRight = true;
+        public Animator anim;
+        private bool isRunning = false;
 
         private void Start()
         {
@@ -18,29 +21,64 @@ namespace Cainos.PixelArtTopDown_Basic
 
         private void Update()
         {
-            Vector2 dir = Vector2.zero;
+            // Получаем ввод от пользователя
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
 
-            if (Input.GetKey(KeyCode.W))
+            // Устанавливаем скорость движения
+            Vector2 movement = new Vector2(horizontalInput, verticalInput);
+            movement.Normalize();
+            rb.velocity = movement * speed;
+
+            // Устанавливаем значение параметра "IsRunning"
+            animator.SetBool("IsRunning", isRunning);
+
+            if (movement.magnitude > 0)
             {
-                dir += Vector2.up;
+                isRunning = true;
+                animator.SetBool("IsRunning", isRunning);
             }
-            if (Input.GetKey(KeyCode.S))
+            else
             {
-                dir += Vector2.down;
+                isRunning = false;
+                animator.SetBool("IsRunning", isRunning);
             }
-            if (Input.GetKey(KeyCode.A))
+            if (movement.magnitude > 0.1f)
             {
-                dir += Vector2.left;
+                // Добавляем проверку скорости персонажа
+                animator.speed = movement.magnitude;
             }
-            if (Input.GetKey(KeyCode.D))
+            else
             {
-                dir += Vector2.right;
+                animator.speed = 1f;
+            }
+            if (movement.magnitude == 0)
+            {
+                isRunning = false;
+                animator.SetBool("IsRunning", isRunning);
             }
 
-            dir.Normalize();
-            animator.SetBool("IsMoving", dir.magnitude > 0);
+        }
 
-            rb.velocity = 5 * dir;
+        private void FixedUpdate()
+        {
+            // Определяем направление взгляда персонажа
+            if (facingRight && rb.velocity.x < 0)
+            {
+                Flip();
+            }
+            else if (!facingRight && rb.velocity.x > 0)
+            {
+                Flip();
+            }
+        }
+
+        private void Flip()
+        {
+            facingRight = !facingRight;
+            Vector3 scale = transform.localScale;
+            scale.x *= -1;
+            transform.localScale = scale;
         }
     }
 }
