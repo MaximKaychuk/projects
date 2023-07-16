@@ -11,7 +11,6 @@ namespace Cainos.PixelArtTopDown_Basic
         private Rigidbody2D rb;
         private bool facingRight = true;
         public Animator anim;
-        private bool isRunning = false;
 
         private void Start()
         {
@@ -30,19 +29,16 @@ namespace Cainos.PixelArtTopDown_Basic
             movement.Normalize();
             rb.velocity = movement * speed;
 
-            // Устанавливаем значение параметра "IsRunning"
-            animator.SetBool("IsRunning", isRunning);
-
-            if (movement.magnitude > 0)
+            // Переключаем между анимациями бега и покоя
+            if (movement.magnitude > 0.01f)
             {
-                isRunning = true;
-                animator.SetBool("IsRunning", isRunning);
+                animator.Play("run");
             }
             else
             {
-                isRunning = false;
-                animator.SetBool("IsRunning", isRunning);
+                animator.Play("idle");
             }
+
             if (movement.magnitude > 0.1f)
             {
                 // Добавляем проверку скорости персонажа
@@ -52,12 +48,8 @@ namespace Cainos.PixelArtTopDown_Basic
             {
                 animator.speed = 1f;
             }
-            if (movement.magnitude == 0)
-            {
-                isRunning = false;
-                animator.SetBool("IsRunning", isRunning);
-            }
 
+            anim.SetFloat("HorisontalMove", Mathf.Abs(horizontalInput));
         }
 
         private void FixedUpdate()
