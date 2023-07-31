@@ -20,6 +20,7 @@ namespace Cainos.PixelArtTopDown_Basic
 
         private void Update()
         {
+         
             // Получаем ввод от пользователя
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
@@ -32,11 +33,11 @@ namespace Cainos.PixelArtTopDown_Basic
             // Переключаем между анимациями бега и покоя
             if (movement.magnitude > 0.01f)
             {
-                animator.Play("run");
+                animator.SetBool("IsRunning", true);
             }
             else
             {
-                animator.Play("idle");
+                animator.SetBool("IsRunning", false);
             }
 
             if (movement.magnitude > 0.1f)
@@ -50,6 +51,8 @@ namespace Cainos.PixelArtTopDown_Basic
             }
 
             anim.SetFloat("HorisontalMove", Mathf.Abs(horizontalInput));
+            Debug.Log("HorisontalMove: " + Mathf.Abs(Input.GetAxis("Horizontal")));
+            Debug.Log("IsRunning: " + animator.GetBool("IsRunning"));
         }
 
         private void FixedUpdate()
