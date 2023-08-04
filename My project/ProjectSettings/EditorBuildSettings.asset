@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/menu.unity
+    guid: 59699866321938e40bee5d18c0d302c8
+  - enabled: 1
+    path: Assets/Martial Hero/Demo/Scene Demo.unity
+    guid: 6dd1420c08f52a847abe76fbb80b30a6
+  - enabled: 1
+    path: Assets/changelvl.unity
+    guid: f21ef23e17362f945aca673e68df87c8
   m_configObjects: {}
